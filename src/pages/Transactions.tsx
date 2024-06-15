@@ -12,28 +12,36 @@ const transactionsData = [
         date: '2024-01-01',
         type: 'Income',
         value: 1000,
-        categories: ['Salary'],
+        categories: [
+            { icon: 'pi pi-apple', label: 'Apple', name: 'apple', parent: null, color: '#ffb6c1' }
+        ],
     },
     {
         id: 2,
         date: '2024-01-02',
         type: 'Expense',
         value: 200,
-        categories: ['Groceries'],
+        categories: [
+            { icon: 'pi pi-facebook', label: 'Facebook', name: 'facebook', parent: null, color: '#add8e6' }
+        ],
     },
     {
         id: 3,
         date: '2024-01-03',
         type: 'Income',
         value: 500,
-        categories: ['Freelancing'],
+        categories: [
+            { icon: 'pi pi-google', label: 'Google', name: 'google', parent: null, color: '#90ee90' }
+        ],
     },
     {
         id: 4,
         date: '2024-01-04',
         type: 'Expense',
         value: 100,
-        categories: ['Transport'],
+        categories: [
+            { icon: 'pi pi-microsoft', label: 'Microsoft', name: 'microsoft', parent: null, color: '#ffcc00' }
+        ],
     },
 ];
 

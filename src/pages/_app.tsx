@@ -7,11 +7,16 @@ import 'primeflex/primeflex.css'; // Importa gli stili di PrimeFlex
 import { AppProps } from 'next/app';
 import { Provider } from 'react-redux';
 import store from '@/redux/store';
+import Navbar from "@/components/Navbar/Navbar";
 
 function MyApp({ Component, pageProps }: AppProps) {
     return (
         <Provider store={store}>
-            <Component {...pageProps} />
+            <Navbar />
+            <div className="p-m-3">
+                <Component {...pageProps} />
+            </div>
+
         </Provider>
     );
 }

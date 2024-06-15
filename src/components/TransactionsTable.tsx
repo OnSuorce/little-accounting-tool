@@ -2,14 +2,23 @@
 import React from 'react';
 import { DataTable } from 'primereact/datatable';
 import { Button } from 'primereact/button';
+import CategoryChips from './CategoryChips';
 import {Column} from "primereact/column";
+
+interface Category {
+    icon: string;
+    label: string;
+    name: string;
+    parent: string | null;
+    color: string;
+}
 
 interface Transaction {
     id: number;
     date: string;
     type: string;
     value: number;
-    categories: string[];
+    categories: Category[];
 }
 
 interface TransactionsTableProps {
@@ -33,7 +42,7 @@ const TransactionsTable: React.FC<TransactionsTableProps> = ({ transactions, onE
             <Column field="date" header="Date" sortable filter filterPlaceholder="Search by Date" />
             <Column field="type" header="Type" sortable filter filterPlaceholder="Search by Type" />
             <Column field="value" header="Value" sortable filter filterPlaceholder="Search by Value" />
-            <Column field="categories" header="Categories" body={(rowData) => rowData.categories.join(', ')} sortable filter filterPlaceholder="Search by Categories" />
+            <Column header="Categories" body={(rowData) => <CategoryChips categories={rowData.categories} />} sortable filter filterPlaceholder="Search by Categories" />
             <Column body={actionTemplate} header="Actions" />
         </DataTable>
     );

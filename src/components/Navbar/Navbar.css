@@ -1,0 +1,12 @@
+.p-menubar {
+    background-color: #f8f9fa;
+    border: 1px solid #dee2e6;
+}
+
+.p-menubar .p-menubar-root-list > .p-menubaritem > .p-menubaritem-link {
+    color: #495057;
+}
+
+.p-menubar .p-menubar-end {
+    margin-left: auto;
+}

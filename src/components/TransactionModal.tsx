@@ -6,8 +6,21 @@ import { InputText } from 'primereact/inputtext';
 import { Dropdown } from 'primereact/dropdown';
 import { Calendar } from 'primereact/calendar';
 import { InputNumber, InputNumberValueChangeEvent } from 'primereact/inputnumber';
+import { Chip } from 'primereact/chip';
 
+interface Category {
+    icon: string;
+    label: string;
+    name: string;
+    parent: string | null;
+}
 
+interface Transaction {
+    date: string;
+    type: string;
+    value: number;
+    categories: Category[];
+}
 
 interface TransactionModalProps {
     visible: boolean;
@@ -21,18 +34,25 @@ const transactionTypes = [
     { label: 'Expense', value: 'Expense' }
 ];
 
+const icons = [
+    { label: 'Apple', value: 'pi pi-apple' },
+    { label: 'Facebook', value: 'pi pi-facebook' },
+    { label: 'Google', value: 'pi pi-google' },
+    { label: 'Microsoft', value: 'pi pi-microsoft' },
+];
+
 const TransactionModal: React.FC<TransactionModalProps> = ({ visible, onHide, onSave, initialData }) => {
     const [date, setDate] = useState<Date | null>(null);
     const [type, setType] = useState<string>('');
     const [value, setValue] = useState<number | null>(null);
-    const [categories, setCategories] = useState<string>('');
+    const [categories, setCategories] = useState<Category[]>([]);
 
     useEffect(() => {
         if (initialData) {
             setDate(new Date(initialData.date));
             setType(initialData.type);
             setValue(initialData.value);
-            setCategories(initialData.categories.join(', '));
+            setCategories(initialData.categories);
         }
     }, [initialData]);
 
@@ -41,9 +61,14 @@ const TransactionModal: React.FC<TransactionModalProps> = ({ visible, onHide, on
             date: date?.toISOString().split('T')[0] || '',
             type,
             value: value || 0,
-            categories: categories.split(',').map(cat => cat.trim())
+            categories
         });
         onHide();
+    };
+
+    const addCategory = (icon: string, label: string) => {
+        const newCategory = { icon, label, name: label.toLowerCase(), parent: null };
+        setCategories([...categories, newCategory]);
     };
 
     const renderFooter = () => {
@@ -72,7 +97,16 @@ const TransactionModal: React.FC<TransactionModalProps> = ({ visible, onHide, on
                 </div>
                 <div className="p-field">
                     <label htmlFor="categories">Categories</label>
-                    <InputText id="categories" value={categories} onChange={(e) => setCategories(e.target.value)} placeholder="Comma separated" />
+                    <div className="p-d-flex p-flex-wrap">
+                        {categories.map((category, index) => (
+                            <Chip key={index} label={category.label} icon={category.icon} className="p-mr-2 p-mb-2" />
+                        ))}
+                    </div>
+                    <div className="p-d-flex p-flex-wrap">
+                        {icons.map((icon) => (
+                            <Button key={icon.value} label={icon.label} icon={icon.value} className="p-mr-2 p-mb-2" onClick={() => addCategory(icon.value, icon.label)} />
+                        ))}
+                    </div>
                 </div>
             </div>
         </Dialog>
