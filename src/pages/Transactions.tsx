@@ -1,8 +1,10 @@
 // pages/transactions.tsx
-import React from 'react';
+import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
-import {RootState} from "@/redux/store";
+import { RootState } from '@/redux/store';
 import TransactionsTable from '../components/TransactionsTable';
+import TransactionModal from '../components/TransactionModal';
+import { Button } from 'primereact/button';
 
 const transactionsData = [
     {
@@ -36,13 +38,38 @@ const transactionsData = [
 ];
 
 const Transactions = () => {
+    const [transactions, setTransactions] = useState(transactionsData);
+    const [isModalVisible, setIsModalVisible] = useState(false);
+    const [editingTransaction, setEditingTransaction] = useState<null | Transaction>(null);
     const user = useSelector((state: RootState) => state.user.user);
+
+    const handleAddTransaction = (transaction: { date: string; type: string; value: number; categories: string[] }) => {
+        if (editingTransaction) {
+            setTransactions(transactions.map(t => t.id === editingTransaction?.id ? { ...t, ...transaction } : t));
+            setEditingTransaction(null);
+        } else {
+            setTransactions([...transactions, { id: transactions.length + 1, ...transaction }]);
+        }
+    };
+
+    const handleEditTransaction = (transaction: Transaction) => {
+        setEditingTransaction(transaction);
+        setIsModalVisible(true);
+    };
+
 
 
     return (
         <div>
             <h1>Transactions</h1>
-            <TransactionsTable transactions={transactionsData} />
+            <Button label="Add Transaction" icon="pi pi-plus" onClick={() => { setEditingTransaction(null); setIsModalVisible(true); }} />
+            <TransactionsTable transactions={transactions} onEdit={handleEditTransaction} />
+            <TransactionModal
+                visible={isModalVisible}
+                onHide={() => setIsModalVisible(false)}
+                onSave={handleAddTransaction}
+                initialData={editingTransaction || undefined}
+            />
         </div>
     );
 };

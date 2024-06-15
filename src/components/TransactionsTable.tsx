@@ -1,8 +1,8 @@
 // components/TransactionsTable.tsx
 import React from 'react';
-import { DataTable, DataTableValue } from 'primereact/datatable';
-import { Column } from 'primereact/column';
+import { DataTable } from 'primereact/datatable';
 import { Button } from 'primereact/button';
+import {Column} from "primereact/column";
 
 interface Transaction {
     id: number;
@@ -14,25 +14,26 @@ interface Transaction {
 
 interface TransactionsTableProps {
     transactions: Transaction[];
+    onEdit: (transaction: Transaction) => void;
 }
 
-const TransactionsTable: React.FC<TransactionsTableProps> = ({ transactions }) => {
+const TransactionsTable: React.FC<TransactionsTableProps> = ({ transactions, onEdit }) => {
     const actionTemplate = (rowData: Transaction) => {
         return (
             <div>
-                <Button icon="pi pi-pencil" className="p-button-rounded p-button-text" />
+                <Button icon="pi pi-pencil" className="p-button-rounded p-button-text" onClick={() => onEdit(rowData)} />
                 <Button icon="pi pi-trash" className="p-button-rounded p-button-text" />
             </div>
         );
     };
 
     return (
-        <DataTable value={transactions} paginator showGridlines size="small" rows={10} className="p-datatable-gridlines">
-            <Column sortable field="id" header="No" />
-            <Column field="date" header="Date" />
-            <Column field="type" header="Type" />
-            <Column sortable field="value" header="Value" />
-            <Column field="categories" header="Categories" body={(rowData) => rowData.categories.join(', ')} />
+        <DataTable value={transactions} paginator rows={10} className="p-datatable-gridlines p-datatable-striped" responsiveLayout="scroll">
+            <Column field="id" header="No" sortable filter filterPlaceholder="Search by No" />
+            <Column field="date" header="Date" sortable filter filterPlaceholder="Search by Date" />
+            <Column field="type" header="Type" sortable filter filterPlaceholder="Search by Type" />
+            <Column field="value" header="Value" sortable filter filterPlaceholder="Search by Value" />
+            <Column field="categories" header="Categories" body={(rowData) => rowData.categories.join(', ')} sortable filter filterPlaceholder="Search by Categories" />
             <Column body={actionTemplate} header="Actions" />
         </DataTable>
     );
