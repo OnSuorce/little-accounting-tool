@@ -20,7 +20,6 @@ const Navbar: React.FC = () => {
     const start = <div className="p-d-flex p-ai-center"><span className="p-mr-2">LAT</span></div>;
     const end = (
         <div className="p-d-flex p-ai-center">
-            <Button label="Action" icon="pi pi-fw pi-plus" className="p-button-text p-mr-3" />
             <UserMenu />
         </div>
     );
